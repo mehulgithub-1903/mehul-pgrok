@@ -237,7 +237,8 @@ func startWebServer(config *conf.Config, db *database.DB) {
 			f.Get("", func(t template.Template, data template.Data, principle *database.Principal) {
 				data["DisplayName"] = principle.DisplayName
 				data["Token"] = principle.Token
-				data["URL"] = config.Proxy.Scheme + "://" + principle.Subdomain + "." + config.Proxy.Domain
+				data["URL"] = config.Proxy.Scheme + "://" + strings.Replace(principle.Subdomain, ".", "-", -1) + "." + config.Proxy.Domain
+
 				t.HTML(http.StatusOK, "home")
 			})
 		},
@@ -347,3 +348,5 @@ func handleOIDCCallback(ctx context.Context, idp *conf.IdentityProvider, redirec
 	}
 	return userInfo, nil
 }
+
+
